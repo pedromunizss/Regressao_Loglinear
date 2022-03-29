@@ -1,4 +1,4 @@
-# Regressao Loglinear
+# Regressão Loglinear
 
 ## Resumo
 
