@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
 # Regressão Loglinear
 
 ## Resumo
@@ -53,3 +58,38 @@ Fonte: *N.Wermuth, pp.279-295 in Proc.9th International Biometrics Conference,Vo
 |          |         |     260+    |         14         |        1594        |
 |          |    5+   |     <260    |          6         |         459        |
 |          |         |     260+    |          1         |         124        |
+
+## Método
+
+Para verificar os padrões de associações entre as variáveis categóricas usaremos
+o modelo log-linear que consiste em modelar a frequência de uma tabela de contingência
+em termos da associação entre as variáveis.
+
+$$log(\mu) = \alpha + \beta_1x_1 + \beta_2x2 + ... + \beta_kx_k$$
+
+onde $\mu$ é a variável resposta que resulta na contagem ou taxa.
+
+### Seleção do Modelo
+
+Para verificar se as variáveis são independentes usamos a seguinte estrutura de
+modelo log-linear
+
+$$log(\mu) = \lambda + \lambda^A + \lambda^G + \lambda^S + \lambda^I$$
+
+Deste modelo, obtemos as seguintes estimativas
+
+|              |   Estimate| Std. Error|   z value| Pr(>\|z\|)          |
+|:-------------|----------:|----------:|---------:|------------------:|
+|(Intercept)   |  1.2967567|  0.0920840|  14.08232|                  0|
+|idade30<      | -2.3129044|  0.0422037| -54.80330|                  0|
+|fuma5<        |  2.2487132|  0.0411147|  54.69363|                  0|
+|gestacao260<  |  0.9316678|  0.0268326|  34.72151|                  0|
+|sobreviveusim |  3.8062150|  0.0828286|  45.95292|                  0|
+
+Se repararmos as estimativas dos coeficientes e os respectivos p-valores
+somos levados a dizer que o modelo está bem ajustado, ou seja, as variáveis são
+independentes. Agora, para testar a qualidade do ajuste usaremos a distribuição
+asssintótica $\G^2$ (deviance do resíduo), com n-p graus de liberdade. Considerando
+a hipótese nulo de que o modelo se ajusta bem e que $G^2$ é assintoticamente
+equivalente a $\chi^2$, chegamos a p-valor de $3.15445e-74$, que nos leva a rejeitar
+a adequabilidade do modelo.
