@@ -22,13 +22,23 @@ modelo1 <- glm(freq ~ ., data = dados, family = poisson())
 modelo1_summary <- summary(modelo)
 knitr::kable(modelo1_summary$coefficients)
 
-# teste do modelo com variaveis independentes
+# teste do modelo com variaveis independentes. Nota-se pelo p-valor que o modelo
+# com variaveis independentes nao se ajusta bem.
 pchisq(modelo1$deviance, df = modelo1$df.residual, lower.tail = F)
+# além do teste, nota-se pelo qqplot que os resíduos não apresetam distribuicao normal
+qqnorm(modelo1$residuals)
 
+# modelo saturado
+modelo_sat <- glm(freq ~ idade*fuma*gestacao*sobreviveu, data = dados, family = poisson())
 
-modelo_sat <- glm(sim + nao ~ idade*fuma*gestacao, data = dados, family = poisson())
+# selecao de modelo stepwise
+modelo_selecionado <- step(modelo_sat, direction='both', )
+modelo2_summary <- summary(modelo_selecionado)
+knitr::kable(modelo2_summary$coefficients)
 
-summary(modelo_sat)
+#teste adequabilidade do modelo selecionado
+pchisq(modelo_selecionado$deviance, df = modelo1$df.residual, lower.tail = F)
 
-mod1=step(modelo_sat,direction='both')
-summary(mod1)
+par(mfrow=c(2,2))
+plot(modelo_selecionado)
+modelo_selecionado$formula

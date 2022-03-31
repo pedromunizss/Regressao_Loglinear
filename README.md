@@ -54,7 +54,7 @@ Fonte: *N.Wermuth, pp.279-295 in Proc.9th International Biometrics Conference,Vo
 |          |    5+   |     <260    |          6         |         459        |
 |          |         |     260+    |          1         |         124        |
 
-## Método
+## Metodologia
 
 Para verificar os padrões de associações entre as variáveis categóricas usaremos
 o modelo log-linear que consiste em modelar a frequência de uma tabela de contingência
@@ -73,7 +73,7 @@ $$log(\mu) = \lambda + \lambda^A + \lambda^G + \lambda^S + \lambda^I$$
 
 Deste modelo, obtemos as seguintes estimativas
 
-|              |   Estimate| Std. Error|   z value| Pr(>\|z\|)          |
+|              |   Estimate| Std. Error|   z value| Pr(>\|z\|)        |
 |:-------------|----------:|----------:|---------:|------------------:|
 |(Intercept)   |  1.2967567|  0.0920840|  14.08232|                  0|
 |idade30<      | -2.3129044|  0.0422037| -54.80330|                  0|
@@ -84,7 +84,38 @@ Deste modelo, obtemos as seguintes estimativas
 Se repararmos as estimativas dos coeficientes e os respectivos p-valores
 somos levados a dizer que o modelo está bem ajustado, ou seja, as variáveis são
 independentes. Agora, para testar a qualidade do ajuste usaremos a distribuição
-asssintótica $\G^2$ (deviance do resíduo), com n-p graus de liberdade. Considerando
+asssintótica $G^2$ (deviance do resíduo), com n-p graus de liberdade. Considerando
 a hipótese nulo de que o modelo se ajusta bem e que $G^2$ é assintoticamente
 equivalente a $\chi^2$, chegamos a p-valor de $3.15445e-74$, que nos leva a rejeitar
 a adequabilidade do modelo.
+
+
+Sabendo que há uma estrutura de interação entre as variáveis, precisa-mos encontrar
+um modelo que melhor explique essas interações. Para encontrá-lo primeiro criamos
+um modelo de associação conjunta (modelo saturado):
+
+$$log(\mu) = \lambda + \lambda^{ASGI}_{ijkl}$$
+
+Como se trata de um modelo hierárquico ele contém todas as interações de ordem inferior.
+Ele descreve perfeitamente qualquer conjunto de frequências esperadas positivas.
+Porém não é muito interessante usá-lo pois ele contém o número máximo de parâmetros
+que o modelo pode ter, violando a lei da parcimônia. A partir do modelo saturado
+utilizamos o método de seleção automática Stepwise com o critério AIC, para selecionar
+o melhor modelo. Feito isso encontramos o modelo com independência condicional entre (AG,AI,GI,GS,IS)
+
+|                           |   Estimate| Std. Error|    z value| Pr(>\|z\|)        |
+|:--------------------------|----------:|----------:|----------:|------------------:|
+|(Intercept)                |  0.5887362|  0.2910900|   2.022523|          0.0431223|
+|idade30<                   |  0.9379422|  0.1880075|   4.988855|          0.0000006|
+|fuma5<                     |  2.1244516|  0.2498510|   8.502875|          0.0000000|
+|gestacao260<               |  0.8688786|  0.2006949|   4.329350|          0.0000150|
+|sobreviveusim              |  4.2170045|  0.2880706|  14.638790|          0.0000000|
+|idade30<:gestacao260<      | -0.1655720|  0.0959934|  -1.724826|          0.0845588|
+|fuma5<:gestacao260<        | -0.4113172|  0.0994959|  -4.134010|          0.0000356|
+|idade30<:sobreviveusim     | -3.3113469|  0.1845236| -17.945386|          0.0000000|
+|fuma5<:sobreviveusim       |  0.4437538|  0.2447117|   1.813374|          0.0697742|
+|gestacao260<:sobreviveusim |  0.4648119|  0.1800294|   2.581867|          0.0098267
+
+Testando a adequabilidade do modelo (o mesmo teste feito para o modelo com variáveis
+independentes), chegamos a p-valor de 0.99903, ou seja, não rejeitamos a hipotese de que
+o modelo se ajusta bem aos dados.
