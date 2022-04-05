@@ -1,6 +1,7 @@
 library(lmtest)
 library(dplyr)
 library(xtable)
+library(statmod)
 
 idade <- rep(c('30<', '30+'), each = 4, times = 1)
 fuma <- rep(c('5<', '5+'), each = 2, times = 2)
@@ -39,6 +40,11 @@ knitr::kable(modelo2_summary$coefficients)
 #teste adequabilidade do modelo selecionado
 pchisq(modelo_selecionado$deviance, df = modelo1$df.residual, lower.tail = F)
 
-par(mfrow=c(2,2))
-plot(modelo_selecionado)
-modelo_selecionado$formula
+plot(density(qresid(modelo_selecionado)))
+lines(density(qresid(modelo)), col='red')
+qqnorm(qresid(modelo_selecionado));qqline(qresid(modelo_selecionado))
+
+
+# tabela com os valores observados e os valores preditos do modelo selecionado
+dados <- cbind(dados, freq_modelo = round(fitted(modelo_selecionado), 2))
+knitr::kable(dados)

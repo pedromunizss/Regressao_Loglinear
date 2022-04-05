@@ -73,13 +73,13 @@ $$log(\mu) = \lambda + \lambda^A + \lambda^G + \lambda^S + \lambda^I$$
 
 Deste modelo, obtemos as seguintes estimativas
 
-|              |   Estimate| Std. Error|   z value| Pr(>\|z\|)        |
-|:-------------|----------:|----------:|---------:|------------------:|
-|(Intercept)   |  1.2967567|  0.0920840|  14.08232|                  0|
-|idade30<      | -2.3129044|  0.0422037| -54.80330|                  0|
-|fuma5<        |  2.2487132|  0.0411147|  54.69363|                  0|
-|gestacao260<  |  0.9316678|  0.0268326|  34.72151|                  0|
-|sobreviveusim |  3.8062150|  0.0828286|  45.95292|                  0|
+|                |   Estimate| Std. Error|   z value| Pr(>\|z\|)        |
+|:---------------|----------:|----------:|---------:|------------------:|
+|(Intercept)     |  1.2967567|  0.0920840|  14.08232|                  0|
+|idade(30<)      | -2.3129044|  0.0422037| -54.80330|                  0|
+|fuma(5<)        |  2.2487132|  0.0411147|  54.69363|                  0|
+|gestacao(260<)  |  0.9316678|  0.0268326|  34.72151|                  0|
+|sobreviveu(sim) |  3.8062150|  0.0828286|  45.95292|                  0|
 
 Se repararmos as estimativas dos coeficientes e os respectivos p-valores
 somos levados a dizer que o modelo está bem ajustado, ou seja, as variáveis são
@@ -103,19 +103,67 @@ que o modelo pode ter, violando a lei da parcimônia. A partir do modelo saturad
 utilizamos o método de seleção automática Stepwise com o critério AIC, para selecionar
 o melhor modelo. Feito isso encontramos o modelo com independência condicional entre (AG,AI,GI,GS,IS)
 
-|                           |   Estimate| Std. Error|    z value| Pr(>\|z\|)        |
-|:--------------------------|----------:|----------:|----------:|------------------:|
-|(Intercept)                |  0.5887362|  0.2910900|   2.022523|          0.0431223|
-|idade30<                   |  0.9379422|  0.1880075|   4.988855|          0.0000006|
-|fuma5<                     |  2.1244516|  0.2498510|   8.502875|          0.0000000|
-|gestacao260<               |  0.8688786|  0.2006949|   4.329350|          0.0000150|
-|sobreviveusim              |  4.2170045|  0.2880706|  14.638790|          0.0000000|
-|idade30<:gestacao260<      | -0.1655720|  0.0959934|  -1.724826|          0.0845588|
-|fuma5<:gestacao260<        | -0.4113172|  0.0994959|  -4.134010|          0.0000356|
-|idade30<:sobreviveusim     | -3.3113469|  0.1845236| -17.945386|          0.0000000|
-|fuma5<:sobreviveusim       |  0.4437538|  0.2447117|   1.813374|          0.0697742|
-|gestacao260<:sobreviveusim |  0.4648119|  0.1800294|   2.581867|          0.0098267
+|                               |   Estimate| Std. Error|    z value| Pr(>\|z\|)        |
+|:------------------------------|----------:|----------:|----------:|------------------:|
+|(Intercept)                    |  0.5887362|  0.2910900|   2.022523|          0.0431223|
+|idade(30<)                     |  0.9379422|  0.1880075|   4.988855|          0.0000006|
+|fuma(5<)                       |  2.1244516|  0.2498510|   8.502875|          0.0000000|
+|gestacao(260<)                 |  0.8688786|  0.2006949|   4.329350|          0.0000150|
+|sobreviveu(sim)                |  4.2170045|  0.2880706|  14.638790|          0.0000000|
+|idade(30<):gestacao(260<)      | -0.1655720|  0.0959934|  -1.724826|          0.0845588|
+|fuma(5<):gestacao(260<)        | -0.4113172|  0.0994959|  -4.134010|          0.0000356|
+|idade(30<):sobreviveu(sim)     | -3.3113469|  0.1845236| -17.945386|          0.0000000|
+|fuma(5<):sobreviveu(sim)       |  0.4437538|  0.2447117|   1.813374|          0.0697742|
+|gestacao(260<):sobreviveu(sim) |  0.4648119|  0.1800294|   2.581867|          0.0098267|
+
+
+
 
 Testando a adequabilidade do modelo (o mesmo teste feito para o modelo com variáveis
-independentes), chegamos a p-valor de 0.99903, ou seja, não rejeitamos a hipotese de que
-o modelo se ajusta bem aos dados.
+independentes), chegamos a p-valor de 0.99903, ou seja, não rejeitamos a hipotese
+de que o modelo se ajusta bem aos dados. Podemos também observar na tabela abaixo
+que a frequência observada e a frequência esperada estão bem próximas, mostrando
+que o modelo se ajusta bem aos dados.
+
+|idade |fuma |gestacao |sobreviveu | freq| freq_modelo|
+|:-----|:----|:--------|:----------|----:|-----------:|
+|30<   |5<   |260<     |sim        |  315|      316.51|
+|30<   |5<   |260+     |sim        |  147|      148.49|
+|30<   |5+   |260<     |sim        |   40|       36.61|
+|30<   |5+   |260+     |sim        |   11|       11.39|
+|30+   |5<   |260<     |sim        | 4012|     4009.09|
+|30+   |5<   |260+     |sim        | 1594|     1593.91|
+|30+   |5+   |260<     |sim        |  459|      463.79|
+|30+   |5+   |260+     |sim        |  124|      122.21|
+|30<   |5<   |260<     |não        |   50|       51.58|
+|30<   |5<   |260+     |não        |   41|       38.52|
+|30<   |5+   |260<     |não        |    9|        9.30|
+|30<   |5+   |260+     |não        |    4|        4.60|
+|30+   |5<   |260<     |não        |   24|       23.83|
+|30+   |5<   |260+     |não        |   14|       15.08|
+|30+   |5+   |260<     |não        |    6|        4.30|
+|30+   |5+   |260+     |não        |    1|        1.80|
+
+
+
+
+## Resultado
+
+De acordo com o modelo selecionado podemos afirmar que ele possui uma estrutura
+de independência condicional e assim podemos fazer a interpretação das chances
+condicionalmente as variáveis restantes, em outras palavras, fixando certas
+variáveis podem fazer uma interpretação sobre razão de chance. Lembrando que a
+razão de chance pode ser calculado pelo exponencial da diferença dos efeitos
+marginais. Sendo assim, o modelo loglinear contendo as variáveis (AG, AI, GI, GS,
+IS) é equivalente ao modelo logístico cuja variável resposta é I e as variáveis
+explicativas são A, G e S.
+
+Portanto, as chances do bebê sobrevivar são exp(-3.311) = 0,036 vezes maior para
+mães com menos de 30 anos, invertendo, temos que a chance do bebê sobreviver é 
+27,778 vezes menor para mães com mais de 30 anos (controlando pela interação entre
+Tempo de Gestação e se Fuma). Se a mãe fumou menos de 5 cigarros durante a gestação
+a chance do bebê sobreviver é exp(0,444) = 1,559 vezes maior para mãe que fumaram
+mais de 5 cigarros durante a gestação (controlando pela interação entre idade e 
+tempo de gestação). Por fim, as mães com tempo de gestação inferior a 260 dias têm
+exp(0,465) = 1,592 vezes mais chance do bebê sobreviver do que mães com tempo de
+gestação superior a 260 dias.
